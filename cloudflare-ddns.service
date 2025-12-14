@@ -1,0 +1,56 @@
+[Unit]
+Description=Cloudflare DDNS Updater
+After=network-online.target
+Wants=network-online.target
+
+# ========================
+# Service configuration
+# ========================
+
+[Service]
+Type=oneshot
+
+# Run as ubuntu user
+User=ubuntu
+Group=ubuntu
+
+# Ensure relative paths & logs work correctly
+WorkingDirectory=/home/ubuntu/cloudflare_ddns_script
+
+# Load environment variables
+EnvironmentFile=/home/ubuntu/cloudflare_ddns_script/.env
+
+# Use virtualenv Python explicitly
+ExecStart=/home/ubuntu/cloudflare_ddns_script/venv/bin/python \
+          /home/ubuntu/cloudflare_ddns_script/cloudflare_ddns.py
+
+# ========================
+# Failure handling & alerts
+# ========================
+
+# Do not auto-restart; timer controls execution
+Restart=no
+
+# Rate-limit failures (prevents alert storms)
+StartLimitIntervalSec=300
+StartLimitBurst=3
+
+# Send all output to the journal
+StandardOutput=journal
+StandardError=journal
+
+# Mark service as failed if exit code != 0
+SuccessExitStatus=0
+
+# ========================
+# Security hardening (safe)
+# ========================
+
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=full
+ProtectHome=false
+RestrictRealtime=true
+
+[Install]
+WantedBy=multi-user.target
