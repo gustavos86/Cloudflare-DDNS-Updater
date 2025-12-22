@@ -134,7 +134,7 @@ def __update_cloudflare_dns_record(record_id, ip_address, name):
                 "name": name,
                 "content": ip_address,
                 "ttl": 1,
-                "proxied": True
+                "proxied": False
             },
             timeout=10
         )
