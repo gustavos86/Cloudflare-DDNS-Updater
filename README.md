@@ -45,3 +45,9 @@ Monitor for errors
 ```
 sudo journalctl -u cloudflare-ddns -p err
 tail -f cloudflare-ddns.log
+
+Set Timezone in Ubuntu
+
+```
+sudo timedatectl set-timezone America/Los_Angeles
+```
